@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.Log
 import com.floracatalana.floracatalana.domain.model.Family
 import com.floracatalana.floracatalana.domain.model.Genus
-import com.floracatalana.floracatalana.domain.model.Species
+import com.floracatalana.floracatalana.domain.model.species.Species
 import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
 import com.floracatalana.floracatalana.util.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import okio.use
 import java.io.IOException
 import javax.inject.Inject
 

@@ -10,8 +10,8 @@ import androidx.annotation.Keep
 data class Genus(
     @SerialName("code")
     val code: String = "",
-    @SerialName("family_code")
-    val familyCode: String = "",
+    @SerialName("short_family")
+    val shortFamily: ShortTaxon = ShortTaxon(),
     @SerialName("n_species")
     val nSpecies: Int = 0,
     @SerialName("name_cat")
@@ -23,5 +23,7 @@ data class Genus(
     @SerialName("rank")
     val rank: String = "",
     @SerialName("url")
-    val url: String = ""
+    val url: String = "",
+    @SerialName("species")
+    val species: List<ShortTaxon> = listOf()
 )

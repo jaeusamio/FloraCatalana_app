@@ -2,7 +2,7 @@ package com.floracatalana.floracatalana.domain.repository
 
 import com.floracatalana.floracatalana.domain.model.Family
 import com.floracatalana.floracatalana.domain.model.Genus
-import com.floracatalana.floracatalana.domain.model.Species
+import com.floracatalana.floracatalana.domain.model.species.Species
 
 interface SpeciesRepository {
     suspend fun loadSpecies(): List<Species>

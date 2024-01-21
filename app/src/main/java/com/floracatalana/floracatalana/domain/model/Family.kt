@@ -21,5 +21,9 @@ data class Family(
     @SerialName("rank")
     val rank: String = "",
     @SerialName("url")
-    val url: String = ""
+    val url: String = "",
+    @SerialName("n_species")
+    val nSpecies: Int = 0,
+    @SerialName("genera")
+    val genera: List<ShortTaxon> = listOf()
 )
