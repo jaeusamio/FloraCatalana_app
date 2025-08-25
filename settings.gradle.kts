@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "FloraCatalana"
-include ':app'
+include (":app")
