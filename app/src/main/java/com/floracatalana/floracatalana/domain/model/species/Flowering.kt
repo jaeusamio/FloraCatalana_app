@@ -8,8 +8,6 @@ import androidx.annotation.Keep
 @Keep
 @Serializable
 data class Flowering(
-    @SerialName("DESEMBRE")
-    val december: Boolean = false,
     @SerialName("GENER")
     val january: Boolean = false,
     @SerialName("FEBRER")
@@ -31,5 +29,7 @@ data class Flowering(
     @SerialName("OCTUBRE")
     val october: Boolean = false,
     @SerialName("NOVEMBRE")
-    val november: Boolean = false
+    val november: Boolean = false,
+    @SerialName("DESEMBRE")
+    val december: Boolean = false
 )
