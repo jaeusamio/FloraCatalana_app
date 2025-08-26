@@ -2,7 +2,6 @@ package com.floracatalana.floracatalana.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,11 +11,12 @@ import com.floracatalana.floracatalana.presentation.screens.family_detail.Family
 import com.floracatalana.floracatalana.presentation.screens.family_detail.FamilyDetailViewModel
 import com.floracatalana.floracatalana.presentation.screens.genus_detail.GenusDetailScreen
 import com.floracatalana.floracatalana.presentation.screens.genus_detail.GenusDetailViewModel
-import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailScreen
-import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailViewModel
 import com.floracatalana.floracatalana.presentation.screens.search.SearchScreen
 import com.floracatalana.floracatalana.presentation.screens.search.SearchViewModel
 import com.floracatalana.floracatalana.presentation.screens.species_detail.ImagesDetailScreen
+import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailScreen
+import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RootNavGraph(
@@ -25,7 +25,7 @@ fun RootNavGraph(
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screen.Search.route) {
-            val viewModel = hiltViewModel<SearchViewModel>()
+            val viewModel = koinViewModel<SearchViewModel>()
             SearchScreen(
                 state = viewModel.state.value,
                 onEvent = viewModel::onEvent,
@@ -40,7 +40,7 @@ fun RootNavGraph(
             val detailSpeciesBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(Screen.DetailSpecies.route)
             }
-            val viewModel: SpeciesDetailViewModel = hiltViewModel(detailSpeciesBackStackEntry)
+            val viewModel: SpeciesDetailViewModel = koinViewModel(viewModelStoreOwner = detailSpeciesBackStackEntry)
             SpeciesDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,
@@ -52,7 +52,7 @@ fun RootNavGraph(
             route = Screen.DetailGenus.route,
             arguments = listOf(navArgument(name = "id") { type = NavType.StringType })
         ) {
-            val viewModel = hiltViewModel<GenusDetailViewModel>()
+            val viewModel = koinViewModel<GenusDetailViewModel>()
             GenusDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,
@@ -64,7 +64,7 @@ fun RootNavGraph(
             route = Screen.DetailFamily.route,
             arguments = listOf(navArgument(name = "id") { type = NavType.StringType })
         ) {
-            val viewModel = hiltViewModel<FamilyDetailViewModel>()
+            val viewModel = koinViewModel<FamilyDetailViewModel>()
             FamilyDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,
@@ -72,11 +72,11 @@ fun RootNavGraph(
             )
         }
 
-        composable(route = Screen.DetailImages.route) {backStackEntry ->
+        composable(route = Screen.DetailImages.route) { backStackEntry ->
             val detailSpeciesBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(Screen.DetailSpecies.route)
             }
-            val viewModel: SpeciesDetailViewModel = hiltViewModel(detailSpeciesBackStackEntry)
+            val viewModel: SpeciesDetailViewModel = koinViewModel(viewModelStoreOwner = detailSpeciesBackStackEntry)
             ImagesDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,

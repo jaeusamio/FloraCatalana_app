@@ -5,13 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(
+@KoinViewModel
+class SearchViewModel(
     private val speciesRepository: SpeciesRepository
 ) : ViewModel() {
 

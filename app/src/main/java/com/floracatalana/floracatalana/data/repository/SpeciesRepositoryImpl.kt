@@ -12,9 +12,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okio.use
 import java.io.IOException
-import javax.inject.Inject
 
-class SpeciesRepositoryImpl @Inject constructor(private val context: Context): SpeciesRepository {
+class SpeciesRepositoryImpl(private val context: Context): SpeciesRepository {
     override suspend fun loadSpecies(): List<Species> = withContext(Dispatchers.IO) {
         val speciesString = readJsonFromAssets("species.json")
         return@withContext Json.decodeFromString<List<Species>>(speciesString)

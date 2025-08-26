@@ -1,21 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id ("com.android.application")
-    id ("kotlin-kapt")
-    id ("org.jetbrains.kotlin.android")
-    id ("org.jetbrains.kotlin.plugin.serialization")
-    id ("com.google.dagger.hilt.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp.compiler)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.floracatalana.floracatalana"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.floracatalana.floracatalana"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -55,53 +55,65 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    applicationVariants.forEach { variant ->
+        variant.sourceSets.forEach {
+            it.javaDirectories += files("build/generated/ksp/${variant.name}/kotlin")
+        }
+    }
+
+    ksp {
+        arg("KOIN_DEFAULT_MODULE","true")
+    }
 }
 
 dependencies {
 
-    implementation ("androidx.core:core-ktx:1.12.0")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation ("androidx.activity:activity-compose:1.8.2")
+    implementation (libs.androidx.core.ktx)
+    implementation (libs.androidx.lifecycle.runtime.ktx)
+    implementation (libs.androidx.activity.compose)
 
     // Compose
-    implementation (platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation ("androidx.compose.ui:ui")
-    implementation ("androidx.compose.ui:ui-graphics")
-    implementation ("androidx.compose.ui:ui-tooling-preview")
-    implementation ("androidx.compose.material3:material3:1.2.0-beta02")
-    implementation ("androidx.compose.runtime:runtime-livedata")
-    implementation ("androidx.compose.material:material-icons-core")
-    implementation ("androidx.compose.material:material-icons-extended")
+    implementation (platform(libs.androidx.compose.bom))
+    implementation (libs.androidx.ui)
+    implementation (libs.androidx.ui.graphics)
+    implementation (libs.androidx.ui.tooling.preview)
+    implementation (libs.androidx.material3)
+    implementation (libs.androidx.runtime.livedata)
+    implementation (libs.androidx.material.icons.core)
+    implementation (libs.androidx.material.icons.extended)
 
     // Compose testing
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation (platform("androidx.compose:compose-bom:2023.10.01"))
-    androidTestImplementation ("androidx.compose.ui:ui-test-junit4")
-    debugImplementation ("androidx.compose.ui:ui-tooling")
-    debugImplementation ("androidx.compose.ui:ui-test-manifest")
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.androidx.espresso.core)
+    androidTestImplementation (libs.androidx.ui.test.junit4)
+    debugImplementation (libs.androidx.ui.tooling)
+    debugImplementation (libs.androidx.ui.test.manifest)
 
     // Compose Viewmodel
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
 
     // Compose Navigation
-    implementation  ("androidx.navigation:navigation-compose:2.7.6")
+    implementation  (libs.androidx.navigation.compose)
 
     // kotlinx serialization
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation (libs.kotlinx.serialization.json)
 
     // Kotlin reflect
-    implementation ("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
-
-    // Dagger Hilt
-    implementation ("com.google.dagger:hilt-android:2.50")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
-    kapt ("com.google.dagger:hilt-compiler:2.50")
+    implementation (libs.kotlin.reflect)
 
     // Coil
-    implementation ("io.coil-kt:coil-compose:2.5.0")
+    implementation (libs.coil.compose)
 
     // Koin
-    implementation ("io.insert-koin:koin-android:4.1.0")
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation (libs.koin.android)
+    implementation(libs.koin.core.coroutines)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.compose.viewmodel.navigation)
+
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 }

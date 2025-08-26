@@ -6,13 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class GenusDetailViewModel @Inject constructor(
+@KoinViewModel
+class GenusDetailViewModel(
     private val speciesRepository: SpeciesRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
