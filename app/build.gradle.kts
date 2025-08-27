@@ -125,4 +125,7 @@ dependencies {
 
     // Ksoup
     implementation(libs.ksoup)
+
+    // Google Maps
+    implementation(libs.maps.compose)
 }
