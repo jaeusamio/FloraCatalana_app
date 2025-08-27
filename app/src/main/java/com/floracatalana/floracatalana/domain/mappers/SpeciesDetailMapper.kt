@@ -1,5 +1,6 @@
 package com.floracatalana.floracatalana.domain.mappers
 
+import com.fleeksoft.ksoup.Ksoup
 import com.floracatalana.floracatalana.data.remote.HttpRoutes
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesDetailResponse
 import com.floracatalana.floracatalana.domain.model.species.Altitude
@@ -110,6 +111,11 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         )
     }
 
+    val mapaDistProcessed = field_mapadist.firstOrNull()?.processed
+    val gbifId = if (mapaDistProcessed != null) {
+        Ksoup.parse(html = mapaDistProcessed).body().select("div").first()?.id()?.replace("map", "")?.toInt()
+    } else null
+
     return Species(
         code = field_codi.firstOrNull()?.value ?: "",
         nameLatin = field_nom_cientific.firstOrNull()?.value ?: "",
@@ -123,6 +129,7 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         nomenclature = nomenclature,
         rank = field_tipus_de_fitxa1.firstOrNull()?.value ?: "",
         subspecies = subspecies,
+        gbifId = gbifId
 //        taxonomy = TODO(),
 //        nodeId = TODO(),
 //        images = TODO(),

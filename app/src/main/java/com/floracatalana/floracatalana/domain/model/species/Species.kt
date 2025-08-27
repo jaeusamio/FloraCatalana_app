@@ -22,5 +22,6 @@ data class Species(
     val shortGenus: ShortTaxon = ShortTaxon(),
     val subspecies: List<Species> = listOf(),
     val taxonomy: Taxonomy? = Taxonomy(),
-    val url: String = ""
+    val url: String = "",
+    val gbifId: Int? = null,
 )
