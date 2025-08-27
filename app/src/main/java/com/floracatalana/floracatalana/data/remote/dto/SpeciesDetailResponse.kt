@@ -1,16 +1,16 @@
 package com.floracatalana.floracatalana.data.remote.dto
 
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldValueBoolean
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FeedsItem
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldImatge
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldProcessed
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldUri
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldValueInt
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.Path
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldValueString
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.FieldTargetItem
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.Timestamp
-import com.floracatalana.floracatalana.data.remote.dto.species_detail_response.Type
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldValueBoolean
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FeedsItem
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldImatge
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldProcessed
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldUri
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldValueInt
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.Path
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldValueString
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.FieldTargetItem
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.Timestamp
+import com.floracatalana.floracatalana.data.remote.dto.detail_response.Type
 import kotlinx.serialization.Serializable
 
 @Serializable

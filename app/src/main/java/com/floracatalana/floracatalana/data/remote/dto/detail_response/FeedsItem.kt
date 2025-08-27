@@ -1,4 +1,4 @@
-package com.floracatalana.floracatalana.data.remote.dto.species_detail_response
+package com.floracatalana.floracatalana.data.remote.dto.detail_response
 
 import kotlinx.serialization.Serializable
 
