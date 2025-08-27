@@ -5,14 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
+import com.floracatalana.floracatalana.data.remote.FloracatalanaApi
+import com.floracatalana.floracatalana.domain.mappers.toFamily
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class FamilyDetailViewModel(
-    private val speciesRepository: SpeciesRepository,
+    private val floracatalanaApi: FloracatalanaApi,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -22,10 +23,9 @@ class FamilyDetailViewModel(
     init {
         savedStateHandle.get<String>("id")?.let { id ->
             viewModelScope.launch(Dispatchers.IO) {
-                val families = speciesRepository.loadFamilies()
-                val selectedFamily = families.first { id == it.code }
+                val familyData = floracatalanaApi.getFamilyDetail(code = id)
                 _state.value = state.value.copy(
-                    family = selectedFamily,
+                    family = familyData.toFamily(),
                     loading = false
                 )
             }

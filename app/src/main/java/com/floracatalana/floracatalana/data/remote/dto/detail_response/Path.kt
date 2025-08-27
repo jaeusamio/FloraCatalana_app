@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Path(
-    val alias: String,
+    val alias: String?,
     val langcode: String,
-    val pid: Int
+    val pid: Int?
 )

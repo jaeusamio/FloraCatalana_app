@@ -11,4 +11,10 @@ object HttpRoutes {
     object SPECIES_DETAIL {
         fun passCode(code: String) = "$BASE_URL/flora/vasculars/taxons/$code?_format=json"
     }
+    object GENUS_DETAIL {
+        fun passCode(code: String) = "$BASE_URL/flora/node/$code?_format=json"
+    }
+    object FAMILY_DETAIL {
+        fun passCode(code: String) = "$BASE_URL/flora/node/$code?_format=json"
+    }
 }

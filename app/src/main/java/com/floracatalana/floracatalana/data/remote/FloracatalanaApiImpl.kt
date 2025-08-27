@@ -1,6 +1,8 @@
 package com.floracatalana.floracatalana.data.remote
 
+import com.floracatalana.floracatalana.data.remote.dto.FamilyDetailResponse
 import com.floracatalana.floracatalana.data.remote.dto.FamilyListResponse
+import com.floracatalana.floracatalana.data.remote.dto.GenusDetailResponse
 import com.floracatalana.floracatalana.data.remote.dto.GenusListResponse
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesDetailResponse
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesListResponse
@@ -25,7 +27,11 @@ class FloracatalanaApiImpl : FloracatalanaApi {
         }
     }
 
-    override suspend fun getSpeciesList(page: Int, genusCode: String?, familyCode: String?): List<SpeciesListResponse> {
+    override suspend fun getSpeciesList(
+        page: Int,
+        genusCode: String?,
+        familyCode: String?
+    ): List<SpeciesListResponse> {
         return httpClient.get {
             url(HttpRoutes.SPECIES_LIST)
             parameter("page", page)
@@ -34,7 +40,10 @@ class FloracatalanaApiImpl : FloracatalanaApi {
         }.body()
     }
 
-    override suspend fun getSearchSpeciesList(searchValue: String, page: Int): List<SpeciesListResponse> {
+    override suspend fun getSearchSpeciesList(
+        searchValue: String,
+        page: Int
+    ): List<SpeciesListResponse> {
         return httpClient.get {
             url(HttpRoutes.SPECIES_SEARCH)
             parameter("page", page)
@@ -51,15 +60,27 @@ class FloracatalanaApiImpl : FloracatalanaApi {
     }
 
     override suspend fun getFamilyList(page: Int): List<FamilyListResponse> {
-                return httpClient.get {
+        return httpClient.get {
             url(HttpRoutes.FAMILY_LIST)
             parameter("page", page)
         }.body()
     }
 
     override suspend fun getSpeciesDetail(code: String): SpeciesDetailResponse {
-                return httpClient.get {
+        return httpClient.get {
             url(HttpRoutes.SPECIES_DETAIL.passCode(code))
+        }.body()
+    }
+
+    override suspend fun getGenusDetail(code: String): GenusDetailResponse {
+        return httpClient.get {
+            url(HttpRoutes.GENUS_DETAIL.passCode(code))
+        }.body()
+    }
+
+    override suspend fun getFamilyDetail(code: String): FamilyDetailResponse {
+        return httpClient.get {
+            url(HttpRoutes.FAMILY_DETAIL.passCode(code))
         }.body()
     }
 }

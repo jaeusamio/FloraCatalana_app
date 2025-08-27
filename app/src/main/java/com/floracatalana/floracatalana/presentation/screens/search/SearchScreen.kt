@@ -187,7 +187,7 @@ fun SearchScreen(
                         items(items = items, key = null) {
                             GenusCard(
                                 genus = it,
-                                onClick = { navController.navigate(Screen.DetailGenus.passId(it.code)) }
+                                onClick = { navController.navigate(Screen.DetailGenus.passId(it.nodeId)) }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }
@@ -196,7 +196,7 @@ fun SearchScreen(
                         items(items = items, key = null) {
                             FamilyCard(
                                 family = it,
-                                onClick = { navController.navigate(Screen.DetailFamily.passId(it.code)) }
+                                onClick = { navController.navigate(Screen.DetailFamily.passId(it.nodeId)) }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }

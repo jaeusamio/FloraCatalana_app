@@ -1,14 +1,11 @@
 package com.floracatalana.floracatalana.presentation.screens.genus_detail
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -19,17 +16,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.floracatalana.floracatalana.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,9 +69,9 @@ fun GenusDetailScreen(
                     Text(text = genus.nameLatin, style = MaterialTheme.typography.displaySmall)
                     Text(text = genus.rank, color = MaterialTheme.colorScheme.tertiary)
                     SuggestionChip(
-                        onClick = { navController.navigate(Screen.DetailFamily.passId(genus.shortFamily.code)) },
+                        onClick = { /* navController.navigate(Screen.DetailFamily.passId(genus.shortFamily.code)) */ },
                         label = {
-                            Text(text = "Família ${genus.shortFamily.name}")
+                            Text(text = "Família")
                         }
                     )
                     Column(
@@ -87,30 +80,30 @@ fun GenusDetailScreen(
                             .padding(vertical = 16.dp)
                             .align(Alignment.Start)
                     ) {
-                        Text(text = "Subtàxons", style = MaterialTheme.typography.titleLarge)
-                        Surface(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier.widthIn(min = 250.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(12.dp)) {
-                                genus.species.forEach { species ->
-                                    Text(
-                                        text = species.name,
-                                        textDecoration = TextDecoration.Underline,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .padding(vertical = 8.dp)
-                                            .clickable {
-                                                navController.navigate(
-                                                    Screen.DetailSpecies.passId(species.code)
-                                                )
-                                            }
-                                    )
-                                }
-                            }
-                        }
+//                        Text(text = "Subtàxons", style = MaterialTheme.typography.titleLarge)
+//                        Surface(
+//                            color = MaterialTheme.colorScheme.primaryContainer,
+//                            shape = RoundedCornerShape(10.dp),
+//                            modifier = Modifier.widthIn(min = 250.dp)
+//                        ) {
+//                            Column(modifier = Modifier.padding(12.dp)) {
+//                                genus.species.forEach { species ->
+//                                    Text(
+//                                        text = species.name,
+//                                        textDecoration = TextDecoration.Underline,
+//                                        fontWeight = FontWeight.Bold,
+//                                        color = MaterialTheme.colorScheme.primary,
+//                                        modifier = Modifier
+//                                            .padding(vertical = 8.dp)
+//                                            .clickable {
+//                                                navController.navigate(
+//                                                    Screen.DetailSpecies.passId(species.code)
+//                                                )
+//                                            }
+//                                    )
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
