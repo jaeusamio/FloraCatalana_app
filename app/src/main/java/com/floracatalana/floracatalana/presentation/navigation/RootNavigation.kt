@@ -37,10 +37,7 @@ fun RootNavGraph(
             route = Screen.DetailSpecies.route,
             arguments = listOf(navArgument(name = "id") { type = NavType.StringType })
         ) { backStackEntry ->
-            val detailSpeciesBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(Screen.DetailSpecies.route)
-            }
-            val viewModel: SpeciesDetailViewModel = koinViewModel(viewModelStoreOwner = detailSpeciesBackStackEntry)
+            val viewModel: SpeciesDetailViewModel = koinViewModel()
             SpeciesDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,
@@ -73,8 +70,13 @@ fun RootNavGraph(
         }
 
         composable(route = Screen.DetailImages.route) { backStackEntry ->
+            // TODO: This could be a separate viewmodel calling a specific endpoint of the API
             val detailSpeciesBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(Screen.DetailSpecies.route)
+                try {
+                    navController.getBackStackEntry(Screen.DetailSpecies.route)
+                } catch (e: IllegalArgumentException) {
+                    backStackEntry // fallback to current entry
+                }
             }
             val viewModel: SpeciesDetailViewModel = koinViewModel(viewModelStoreOwner = detailSpeciesBackStackEntry)
             ImagesDetailScreen(
