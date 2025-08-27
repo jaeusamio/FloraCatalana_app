@@ -58,6 +58,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.floracatalana.floracatalana.data.remote.HttpRoutes
 import com.floracatalana.floracatalana.domain.model.ShortTaxon
 import com.floracatalana.floracatalana.domain.model.species.Description
 import com.floracatalana.floracatalana.domain.model.species.Ecology
@@ -71,6 +72,16 @@ import com.floracatalana.floracatalana.util.ECOLOGY
 import com.floracatalana.floracatalana.util.FLOWERING
 import com.floracatalana.floracatalana.util.NOMENCLATURE
 import com.floracatalana.floracatalana.util.TAXONOMY
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.UrlTileProvider
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.TileOverlay
+import com.google.maps.android.compose.rememberCameraPositionState
+import java.net.MalformedURLException
+import java.net.URL
 import kotlin.reflect.full.memberProperties
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -207,7 +218,7 @@ fun SpeciesDetailScreen(
                         species.description?.let { DescriptionSection(description = it) }
                     }
                     if (tabTitles[state.selectedTab] == DISTRIBUTION) {
-                        species.distribution?.let { DistributionSection(distribution = it) }
+                        species.distribution?.let { DistributionSection(distribution = it, species.gbifId) }
                     }
                     if (tabTitles[state.selectedTab] == NOMENCLATURE) {
                         species.nomenclature?.let { NomenclatureSection(nomenclature = it) }
@@ -265,12 +276,52 @@ fun DescriptionSection(description: Description) {
 }
 
 @Composable
-fun DistributionSection(distribution: String) {
+fun DistributionSection(distribution: String, taxonKey: Int?) {
     val uriHandler = LocalUriHandler.current
-    Text(
-        text = "Mapa de distribució",
-        modifier = Modifier.clickable { uriHandler.openUri(distribution) }
-    )
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(8.dp)) {
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition(
+                LatLngBounds(
+                    LatLng(40.493716, 0.039045),
+                    LatLng(42.847716, 3.400021)
+                ).center, 7f, 0f, 0f
+            )
+        }
+        val uiSettings = MapUiSettings(
+            compassEnabled = false,
+            myLocationButtonEnabled = false,
+            mapToolbarEnabled = false,
+            tiltGesturesEnabled = false,
+            zoomControlsEnabled = false,
+            scrollGesturesEnabled = false,
+            rotationGesturesEnabled = false,
+            scrollGesturesEnabledDuringRotateOrZoom = false,
+            zoomGesturesEnabled = false
+        )
+        GoogleMap(
+            modifier = Modifier
+                .height(300.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .clip(RoundedCornerShape(10.dp)),
+            cameraPositionState = cameraPositionState,
+            uiSettings = uiSettings
+        ) {
+            taxonKey?.let { TileOverlay(MapTileProvider(taxonKey = it)) }
+        }
+
+        Text(
+            text = "Mapa de distribució (BDBC)",
+            textDecoration = TextDecoration.Underline,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.clickable { uriHandler.openUri(distribution) }
+        )
+
+    }
 }
 
 @Composable
@@ -876,6 +927,20 @@ fun ImageCard(
                     )
                 }
             }
+        }
+    }
+}
+
+class MapTileProvider(val taxonKey: Int) : UrlTileProvider(512, 512) {
+    override fun getTileUrl(
+        x: Int,
+        y: Int,
+        zoom: Int
+    ): URL? {
+        return try {
+            URL(HttpRoutes.GbifTileOverlay(taxonKey = taxonKey, x = x, y = y, zoom = zoom))
+        } catch (e: MalformedURLException) {
+            throw AssertionError(e)
         }
     }
 }
