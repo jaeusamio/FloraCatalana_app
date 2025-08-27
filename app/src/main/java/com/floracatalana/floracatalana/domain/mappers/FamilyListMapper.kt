@@ -8,14 +8,15 @@ import com.floracatalana.floracatalana.domain.model.Family
 fun FamilyListResponse.toFamily(): Family {
     val nomFamilia = Ksoup.parse(html = nom_familia_cat).text()
     val familyUrl = Ksoup.parse(html = nom_familia_cat).body().select("a").attr("href")
+    val nodeId = familyUrl.split("/").last().replace("\\", "")
     
     return Family(
         code = codi_familia,
         nameCat = nomFamilia,
         nameLatin = nom_familia_llati,
         url = HttpRoutes.BASE_URL + familyUrl,
+        nodeId = nodeId,
 //        nGenera = TODO(),
-//        nodeId = TODO(),
 //        rank = TODO(),
 //        nSpecies = TODO(),
 //        genera = TODO()

@@ -8,8 +8,10 @@ import com.floracatalana.floracatalana.domain.model.ShortTaxon
 
 fun GenusListResponse.toGenus(): Genus {
     val nomFamilia = Ksoup.parse(html = nom_familia).text()
-    val nomGenere = Ksoup.parse(html = nom_genere).text()
-    val genusUrl = Ksoup.parse(html = nomGenere).body().select("a").attr("href")
+    val parse = Ksoup.parse(html = nom_genere)
+    val nomGenere = parse.text()
+    val genusUrl = parse.body().select("a").attr("href")
+    val nodeId = genusUrl.split("/").last().replace("\\", "")
 
     return Genus(
         code = codi_genere,
@@ -19,9 +21,9 @@ fun GenusListResponse.toGenus(): Genus {
             code = `codi-familia`,
             name = nomFamilia
         ),
-//        nSpecies = TODO(),
+        nodeId = nodeId,
 //        nameCat = TODO(),
-//        nodeId = TODO(),
+//        nSpecies = TODO(),
 //        rank = TODO(),
 //        species = TODO()
     )
