@@ -4,14 +4,17 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
+import com.floracatalana.floracatalana.data.remote.FloracatalanaApi
+import com.floracatalana.floracatalana.domain.mappers.toFamily
+import com.floracatalana.floracatalana.domain.mappers.toGenus
+import com.floracatalana.floracatalana.domain.mappers.toSpecies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class SearchViewModel(
-    private val speciesRepository: SpeciesRepository
+    private val floracatalanaApi: FloracatalanaApi,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(SearchState())
@@ -19,9 +22,9 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val species = speciesRepository.loadSpecies()
-            val genera = speciesRepository.loadGenera()
-            val families = speciesRepository.loadFamilies()
+            val species = floracatalanaApi.getSpeciesList().map { it.toSpecies() }
+            val genera = floracatalanaApi.getGenusList().map { it.toGenus() }
+            val families = floracatalanaApi.getFamilyList().map { it.toFamily() }
             _state.value = state.value.copy(
                 speciesList = species,
                 autocompleteSpeciesList = species,
@@ -34,6 +37,7 @@ class SearchViewModel(
         }
     }
 
+    // TODO: Search should proceed through the API. Wait until pagination is implemented
     fun onEvent(event: SearchEvent) {
         when (event) {
             is SearchEvent.SearchSpecies -> {
