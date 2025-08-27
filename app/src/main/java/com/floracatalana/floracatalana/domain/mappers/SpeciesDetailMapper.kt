@@ -50,35 +50,35 @@ fun SpeciesDetailResponse.toSpecies(): Species {
     val categoryImages = listOf(
         CategoryImage(
             label = "Hàbitat",
-            url = field_imatge_habitat.firstOrNull()?.url
+            url = field_imatge_habitat.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Subterrani",
-            url = field_imatge_subterranivasculars.firstOrNull()?.url
+            url = field_imatge_subterranivasculars.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Port",
-            url = field_imatge_port.firstOrNull()?.url
+            url = field_imatge_port.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Tija",
-            url = field_imatge_tija_troncvascul.firstOrNull()?.url
+            url = field_imatge_tija_troncvascul.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Fulles",
-            url = field_imatge_fullesvasculars.firstOrNull()?.url
+            url = field_imatge_fullesvasculars.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Flors",
-            url = field_imatge_flor_iflorescencia.firstOrNull()?.url
+            url = field_imatge_flor_iflorescencia.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Fruits",
-            url = field_imatge_fruit_llavors.firstOrNull()?.url
+            url = field_imatge_fruit_llavors.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
         CategoryImage(
             label = "Altres",
-            url = field_imatge_altresvasculars.firstOrNull()?.url
+            url = field_imatge_altresvasculars.firstOrNull()?.url?.replace("http://", "https://www.")
         ),
     )
 
@@ -102,6 +102,14 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         termcatUrl = field_termcat.firstOrNull()?.uri
     )
 
+    val subspecies = field_taxons.map {
+        val code = it.url.split("/").last()
+        Species(
+            code = code,
+            url = HttpRoutes.BASE_URL + it.url
+        )
+    }
+
     return Species(
         code = field_codi.firstOrNull()?.value ?: "",
         nameLatin = field_nom_cientific.firstOrNull()?.value ?: "",
@@ -114,8 +122,7 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         nameCat = field_nom_catala.firstOrNull()?.value,
         nomenclature = nomenclature,
         rank = field_tipus_de_fitxa1.firstOrNull()?.value ?: "",
-        // subspecies es troba a field_taxons (List<FieldTargetItem>)
-//        subspecies = TODO(),
+        subspecies = subspecies,
 //        taxonomy = TODO(),
 //        nodeId = TODO(),
 //        images = TODO(),

@@ -5,14 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.floracatalana.floracatalana.domain.repository.SpeciesRepository
+import com.floracatalana.floracatalana.data.remote.FloracatalanaApi
+import com.floracatalana.floracatalana.domain.mappers.toSpecies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class SpeciesDetailViewModel(
-    private val speciesRepository: SpeciesRepository,
+    private val floracatalanaApi: FloracatalanaApi,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -22,19 +23,10 @@ class SpeciesDetailViewModel(
     init {
         savedStateHandle.get<String>("id")?.let { id ->
             viewModelScope.launch(Dispatchers.IO) {
-                val species = speciesRepository.loadSpecies()
-                val selectedSpecies =
-                    species.firstOrNull { it.code == id } ?: species.flatMap { it.subspecies }
-                        .first { it.code == id }
-                val genera = speciesRepository.loadGenera()
-                val selectedGenus = genera.first { selectedSpecies.shortGenus.code == it.code }
-                val families = speciesRepository.loadFamilies()
-                val selectedFamily = families.first { selectedSpecies.shortFamily.code == it.code }
+                val speciesData = floracatalanaApi.getSpeciesDetail(code = id)
                 _state.value = state.value.copy(
-                    species = selectedSpecies,
+                    species = speciesData.toSpecies(),
                     loading = false,
-                    genus = selectedGenus,
-                    family = selectedFamily
                 )
             }
         }

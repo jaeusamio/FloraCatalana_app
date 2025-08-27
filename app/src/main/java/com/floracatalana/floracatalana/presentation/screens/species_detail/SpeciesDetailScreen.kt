@@ -119,15 +119,15 @@ fun SpeciesDetailScreen(
                     Text(text = species.rank, color = MaterialTheme.colorScheme.tertiary)
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         SuggestionChip(
-                            onClick = { navController.navigate(Screen.DetailGenus.passId(species.shortGenus.code)) },
+                            onClick = { /* navController.navigate(Screen.DetailGenus.passId(species.shortGenus.code)) */ },
                             label = {
-                                Text(text = "Gènere ${species.shortGenus.name}")
+                                Text(text = "Gènere")
                             }
                         )
                         SuggestionChip(
-                            onClick = { navController.navigate(Screen.DetailFamily.passId(species.shortFamily.code)) },
+                            onClick = { /* navController.navigate(Screen.DetailFamily.passId(species.shortFamily.code)) */ },
                             label = {
-                                Text(text = "Família ${species.shortFamily.name}")
+                                Text(text = "Família")
                             }
                         )
                     }
@@ -143,12 +143,10 @@ fun SpeciesDetailScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
-                if (species.images.isNotEmpty()) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        TextButton(onClick = { navController.navigate(Screen.DetailImages.route) }) {
-                            Text(text = "Més imatges (${species.images.size})")
-                        }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(onClick = { /* navController.navigate(Screen.DetailImages.route) */ }) {
+                        Text(text = "Més imatges (${species.images.size})")
                     }
                 }
                 if (species.subspecies.isNotEmpty()) {
@@ -162,7 +160,7 @@ fun SpeciesDetailScreen(
                             Column(modifier = Modifier.padding(12.dp)) {
                                 species.subspecies.forEach { subspecies ->
                                     Text(
-                                        text = subspecies.nameLatin,
+                                        text = subspecies.code,
                                         textDecoration = TextDecoration.Underline,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary,
