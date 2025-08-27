@@ -13,7 +13,7 @@ interface FloracatalanaApi {
 
     suspend fun getSearchSpeciesList(searchValue: String, page: Int = 0): List<SpeciesListResponse>
 
-    suspend fun getGenusList(page: Int = 0, familyCode: String): List<GenusListResponse>
+    suspend fun getGenusList(page: Int = 0, familyCode: String? = null): List<GenusListResponse>
 
     suspend fun getFamilyList(page: Int = 0): List<FamilyListResponse>
 

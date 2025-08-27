@@ -51,7 +51,7 @@ class FloracatalanaApiImpl : FloracatalanaApi {
         }.body()
     }
 
-    override suspend fun getGenusList(page: Int, familyCode: String): List<GenusListResponse> {
+    override suspend fun getGenusList(page: Int, familyCode: String?): List<GenusListResponse> {
         return httpClient.get {
             url(HttpRoutes.GENUS_LIST)
             parameter("page", page)
