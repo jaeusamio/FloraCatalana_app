@@ -2,9 +2,15 @@ package com.floracatalana.floracatalana.presentation.screens.family_detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,9 +26,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.floracatalana.floracatalana.domain.model.TaxonRank
+import com.floracatalana.floracatalana.presentation.screens.species_detail.ImageCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +85,29 @@ fun FamilyDetailScreen(
                         textAlign = TextAlign.Center
                     )
                     Text(text = family.rank.label, color = MaterialTheme.colorScheme.tertiary)
+                    if (family.categoryImages.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        LazyRow {
+                            items(items = family.categoryImages) { image ->
+                                val annotatedString = AnnotatedString.fromHtml(
+                                    image.label,
+                                    linkStyles = TextLinkStyles(
+                                        style = SpanStyle(
+                                            fontStyle = FontStyle.Italic,
+                                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                                            color = MaterialTheme.colorScheme.surfaceVariant
+                                        )
+                                    )
+                                )
+                                ImageCard(
+                                    imageUrl = image.url,
+                                    label = annotatedString,
+                                    modifier = Modifier.size(127.dp)
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                            }
+                        }
+                    }
                 }
             }
         }

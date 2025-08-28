@@ -937,6 +937,92 @@ fun ImageCard(
     label: String? = "",
     onClick: () -> Unit = {}
 ) {
+    BaseImageCard(
+        modifier = modifier,
+        imageUrl = imageUrl,
+        onClick = onClick
+    ) {
+        label?.let {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent, Color.Black.copy(alpha = 0.4f)
+                            ),
+                            startY = 200f
+                        )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String? = "",
+    label: AnnotatedString? = null,
+    onClick: () -> Unit = {}
+) {
+    BaseImageCard(
+        modifier = modifier,
+        imageUrl = imageUrl,
+        onClick = onClick
+    ) {
+        label?.let {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent, Color.Black.copy(alpha = 0.4f)
+                            ),
+                            startY = 200f
+                        )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BaseImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String? = "",
+    onClick: () -> Unit = {},
+    labelContent: @Composable () -> Unit = {}
+) {
     Column(modifier = modifier.clickable { onClick() }) {
         Box(
             modifier = Modifier
@@ -1005,34 +1091,7 @@ fun ImageCard(
                 }
             }
 
-            label?.let {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent, Color.Black.copy(alpha = 0.4f)
-                                ),
-                                startY = 200f
-                            )
-                        )
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(12.dp),
-                    contentAlignment = Alignment.BottomStart
-                ) {
-                    Text(
-                        text = label,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Color.White,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+            labelContent()
         }
     }
 }
