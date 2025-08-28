@@ -7,17 +7,17 @@ coreKtx = "1.17.0"
 espressoCore = "3.7.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
-koin = "4.0.3"
-kotlin = "2.0.21"
+koin = "4.1.0"
+kotlin = "2.1.20"
 kotlinxSerializationJson = "1.7.3"
 ksoup = "0.1.6"
 lifecycleViewmodelCompose = "2.9.2"
-mapsCompose = "6.1.0"
 material3 = "1.3.2"
 navigationCompose = "2.9.3"
-kspVersion = "2.0.21-1.0.28"
+kspVersion = "2.1.20-1.0.32"
 koinAnnotationsVersion = "2.1.0"
 ktor = "3.2.3"
+maplibre = "0.10.4"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -64,7 +64,7 @@ ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", 
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization = {module = "io.ktor:ktor-serialization-kotlinx-json", version.ref="ktor"}
 
-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+maplibre-compose = { module = "dev.sargunv.maplibre-compose:maplibre-compose", version.ref = "maplibre" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

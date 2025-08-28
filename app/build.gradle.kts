@@ -126,6 +126,6 @@ dependencies {
     // Ksoup
     implementation(libs.ksoup)
 
-    // Google Maps
-    implementation(libs.maps.compose)
+    // Maplibre
+    implementation(libs.maplibre.compose)
 }

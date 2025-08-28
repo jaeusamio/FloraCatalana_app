@@ -42,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -84,17 +85,17 @@ import com.floracatalana.floracatalana.util.ECOLOGY
 import com.floracatalana.floracatalana.util.FLOWERING
 import com.floracatalana.floracatalana.util.NOMENCLATURE
 import com.floracatalana.floracatalana.util.TAXONOMY
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.UrlTileProvider
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.TileOverlay
-import com.google.maps.android.compose.rememberCameraPositionState
-import java.net.MalformedURLException
-import java.net.URL
+import dev.sargunv.maplibrecompose.compose.MaplibreMap
+import dev.sargunv.maplibrecompose.compose.layer.RasterLayer
+import dev.sargunv.maplibrecompose.compose.rememberCameraState
+import dev.sargunv.maplibrecompose.core.BaseStyle
+import dev.sargunv.maplibrecompose.core.GestureOptions
+import dev.sargunv.maplibrecompose.core.MapOptions
+import dev.sargunv.maplibrecompose.core.OrnamentOptions
+import io.github.dellisd.spatialk.geojson.BoundingBox
+import io.github.dellisd.spatialk.geojson.Position
 import kotlin.reflect.full.memberProperties
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -386,26 +387,40 @@ fun DescriptionSection(description: Description, onExpandImageClick: (String) ->
 fun DistributionSection(distribution: String?, taxonKey: Int?) {
     val uriHandler = LocalUriHandler.current
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(8.dp)) {
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(
-                LatLngBounds(
-                    LatLng(40.493716, 0.039045),
-                    LatLng(42.847716, 3.400021)
-                ).center, 7f, 0f, 0f
+        val camera =
+            rememberCameraState(
+                firstPosition =
+                    dev.sargunv.maplibrecompose.core.CameraPosition(
+                        target = Position(
+                            1.719533,
+                            41.670716
+                        ), zoom = 7.0
+                    )
             )
-        }
-        val uiSettings = MapUiSettings(
-            compassEnabled = false,
-            myLocationButtonEnabled = false,
-            mapToolbarEnabled = false,
-            tiltGesturesEnabled = false,
-            zoomControlsEnabled = false,
-            scrollGesturesEnabled = false,
-            rotationGesturesEnabled = false,
-            scrollGesturesEnabledDuringRotateOrZoom = false,
-            zoomGesturesEnabled = false
+        val bounds = BoundingBox(
+            southwest = Position(latitude = 40.493716, longitude = 0.039045),
+            northeast = Position(latitude = 42.847716, longitude = 3.400021)
         )
-        GoogleMap(
+        LaunchedEffect(Unit) {
+            camera.animateTo(bounds, duration = 1.milliseconds)
+        }
+        val gbifTiles = "https://api.gbif.org/v2/map/occurrence/density/{z}/{x}/{y}@1x.png" +
+                "?taxonKey=$taxonKey" +
+                "&bin=hex" +
+                "&hexPerTile=80" +
+                "&squareSize=64" +
+                "&style=classic.poly"
+        val mapOptions = MapOptions(
+            ornamentOptions =
+                OrnamentOptions(
+                    isLogoEnabled = false,
+                    isAttributionEnabled = false,
+                    isCompassEnabled = false,
+                    isScaleBarEnabled = false,
+                ),
+            gestureOptions = GestureOptions.AllDisabled
+        )
+        MaplibreMap(
             modifier = Modifier
                 .height(300.dp)
                 .border(
@@ -414,10 +429,19 @@ fun DistributionSection(distribution: String?, taxonKey: Int?) {
                     shape = RoundedCornerShape(10.dp)
                 )
                 .clip(RoundedCornerShape(10.dp)),
-            cameraPositionState = cameraPositionState,
-            uiSettings = uiSettings
+            baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+            cameraState = camera,
+            options = mapOptions
         ) {
-            taxonKey?.let { TileOverlay(MapTileProvider(taxonKey = it)) }
+            val source = dev.sargunv.maplibrecompose.core.source.RasterSource(
+                id = "gbif-occurrence-density",
+                tiles = listOf(gbifTiles),
+                tileSize = 512,
+            )
+            RasterLayer(
+                id = "gbif-occurrence-density-layer",
+                source = source
+            )
         }
         distribution?.let {
             Text(
@@ -1105,20 +1129,6 @@ fun BaseImageCard(
             }
 
             labelContent()
-        }
-    }
-}
-
-class MapTileProvider(val taxonKey: Int) : UrlTileProvider(512, 512) {
-    override fun getTileUrl(
-        x: Int,
-        y: Int,
-        zoom: Int
-    ): URL? {
-        return try {
-            URL(HttpRoutes.GbifTileOverlay(taxonKey = taxonKey, x = x, y = y, zoom = zoom))
-        } catch (e: MalformedURLException) {
-            throw AssertionError(e)
         }
     }
 }
