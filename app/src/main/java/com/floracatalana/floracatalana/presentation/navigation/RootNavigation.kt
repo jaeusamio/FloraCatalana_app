@@ -2,6 +2,7 @@ package com.floracatalana.floracatalana.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,8 @@ import com.floracatalana.floracatalana.presentation.screens.search.SearchViewMod
 import com.floracatalana.floracatalana.presentation.screens.species_detail.ImagesDetailScreen
 import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailScreen
 import com.floracatalana.floracatalana.presentation.screens.species_detail.SpeciesDetailViewModel
+import com.floracatalana.floracatalana.presentation.screens.subtaxa_list.SubtaxaListScreen
+import com.floracatalana.floracatalana.presentation.screens.subtaxa_list.SubtaxaListViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -82,6 +85,21 @@ fun RootNavGraph(
             ImagesDetailScreen(
                 state = viewModel.state.value,
                 navController = navController,
+            )
+        }
+
+        composable(
+            route = Screen.SubtaxaList.route,
+            arguments = listOf(
+                navArgument(name = "id") { type = NavType.StringType },
+                navArgument(name = "queried_rank") { type = NavType.IntType },
+                navArgument(name = "returned_rank") { type = NavType.IntType }
+            )
+        ) {
+            val viewModel: SubtaxaListViewModel = koinViewModel()
+            SubtaxaListScreen(
+                navController = navController,
+                state = viewModel.state.collectAsStateWithLifecycle().value
             )
         }
     }
