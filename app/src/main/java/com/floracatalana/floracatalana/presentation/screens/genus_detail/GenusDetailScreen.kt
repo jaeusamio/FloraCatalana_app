@@ -66,8 +66,12 @@ fun GenusDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = genus.nameLatin, style = MaterialTheme.typography.displaySmall)
                     Text(text = genus.rank, color = MaterialTheme.colorScheme.tertiary)
+                    Text(
+                        text = genus.nameLatin,
+                        style = MaterialTheme.typography.displaySmall,
+                        textAlign = TextAlign.Center
+                    )
                     SuggestionChip(
                         onClick = { /* navController.navigate(Screen.DetailFamily.passId(genus.shortFamily.code)) */ },
                         label = {

@@ -65,7 +65,6 @@ fun FamilyDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = family.nameCat, style = MaterialTheme.typography.displaySmall)
                     Text(text = family.rank, color = MaterialTheme.colorScheme.tertiary)
 //                    Column(
 //                        horizontalAlignment = Alignment.Start,
@@ -98,6 +97,11 @@ fun FamilyDetailScreen(
 //                            }
 //                        }
 //                    }
+                    Text(
+                        text = family.nameCat,
+                        style = MaterialTheme.typography.displaySmall,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
