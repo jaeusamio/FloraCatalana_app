@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.floracatalana.floracatalana.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +74,7 @@ fun GenusDetailScreen(
                     )
                     Text(text = genus.rank.label, color = MaterialTheme.colorScheme.tertiary)
                     SuggestionChip(
-                        onClick = { /* navController.navigate(Screen.DetailFamily.passId(genus.shortFamily.code)) */ },
+                        onClick = { navController.navigate(Screen.DetailFamily.passId(genus.shortFamily.code)) },
                         label = {
                             Text(text = "Família")
                         }

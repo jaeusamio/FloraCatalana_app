@@ -146,7 +146,7 @@ fun SpeciesDetailScreen(
                     Text(text = species.rank.label, color = MaterialTheme.colorScheme.tertiary)
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         SuggestionChip(
-                            onClick = { /* navController.navigate(Screen.DetailGenus.passId(species.shortGenus.code)) */ },
+                            onClick = { navController.navigate(Screen.DetailGenus.passId(species.shortGenus.code)) },
                             label = {
                                 Text(text = "Gènere")
                             }
