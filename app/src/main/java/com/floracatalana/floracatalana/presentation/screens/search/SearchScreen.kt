@@ -253,11 +253,11 @@ fun GenusCard(
     genus: Genus,
     onClick: () -> Unit
 ) {
-    val numberOfSpeciesText = if (genus.nSpecies == 1) "1 espècie" else "${genus.nSpecies} espècies"
+//    val numberOfSpeciesText = if (genus.nSpecies == 1) "1 espècie" else "${genus.nSpecies} espècies"
     BaseCard(
         title = genus.nameLatin,
         subtitle = { Text(text = genus.shortFamily.name) },
-        numberOfTaxaText = numberOfSpeciesText,
+        numberOfTaxaText = null,
         imageUrl = null,
         icon = Icons.Default.LocalFlorist,
         onClick = onClick
@@ -269,11 +269,11 @@ fun FamilyCard(
     family: Family,
     onClick: () -> Unit
 ) {
-    val numberOfGeneraText = if (family.nGenera == 1) "1 gènere" else "${family.nGenera} gèneres"
+//    val numberOfGeneraText = if (family.nGenera == 1) "1 gènere" else "${family.nGenera} gèneres"
     BaseCard(
         title = family.nameCat,
         subtitle = { Text(text = family.nameLatin, fontStyle = FontStyle.Italic) },
-        numberOfTaxaText = numberOfGeneraText,
+        numberOfTaxaText = null,
         imageUrl = null,
         icon = Icons.Default.Park,
         onClick = onClick
