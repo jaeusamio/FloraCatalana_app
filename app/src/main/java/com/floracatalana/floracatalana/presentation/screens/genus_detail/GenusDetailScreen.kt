@@ -17,12 +17,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.floracatalana.floracatalana.domain.model.TaxonRank
 import com.floracatalana.floracatalana.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,30 +88,17 @@ fun GenusDetailScreen(
                             .padding(vertical = 16.dp)
                             .align(Alignment.Start)
                     ) {
-//                        Text(text = "Subtàxons", style = MaterialTheme.typography.titleLarge)
-//                        Surface(
-//                            color = MaterialTheme.colorScheme.primaryContainer,
-//                            shape = RoundedCornerShape(10.dp),
-//                            modifier = Modifier.widthIn(min = 250.dp)
-//                        ) {
-//                            Column(modifier = Modifier.padding(12.dp)) {
-//                                genus.species.forEach { species ->
-//                                    Text(
-//                                        text = species.name,
-//                                        textDecoration = TextDecoration.Underline,
-//                                        fontWeight = FontWeight.Bold,
-//                                        color = MaterialTheme.colorScheme.primary,
-//                                        modifier = Modifier
-//                                            .padding(vertical = 8.dp)
-//                                            .clickable {
-//                                                navController.navigate(
-//                                                    Screen.DetailSpecies.passId(species.code)
-//                                                )
-//                                            }
-//                                    )
-//                                }
-//                            }
-//                        }
+                        TextButton(onClick = {
+                            navController.navigate(
+                                Screen.SubtaxaList.passValues(
+                                    id = genus.nodeId,
+                                    queriedRank = TaxonRank.GENUS.id,
+                                    returnedRank = TaxonRank.SPECIES.id
+                                )
+                            )
+                        }) {
+                            Text(text = "Llista de tàxons")
+                        }
                     }
                 }
             }

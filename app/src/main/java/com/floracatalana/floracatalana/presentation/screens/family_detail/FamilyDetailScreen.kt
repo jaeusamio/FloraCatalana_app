@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.floracatalana.floracatalana.domain.model.TaxonRank
+import com.floracatalana.floracatalana.presentation.navigation.Screen
 import com.floracatalana.floracatalana.presentation.screens.species_detail.ImageCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,6 +109,28 @@ fun FamilyDetailScreen(
                                 Spacer(modifier = Modifier.width(10.dp))
                             }
                         }
+                    }
+                    TextButton(onClick = {
+                        navController.navigate(
+                            Screen.SubtaxaList.passValues(
+                                id = family.nodeId,
+                                queriedRank = TaxonRank.FAMILY.id,
+                                returnedRank = TaxonRank.GENUS.id
+                            )
+                        )
+                    }) {
+                        Text(text = "Llista de gèneres")
+                    }
+                    TextButton(onClick = {
+                        navController.navigate(
+                            Screen.SubtaxaList.passValues(
+                                id = family.nodeId,
+                                queriedRank = TaxonRank.FAMILY.id,
+                                returnedRank = TaxonRank.SPECIES.id
+                            )
+                        )
+                    }) {
+                        Text(text = "Llista de tàxons")
                     }
                 }
             }
