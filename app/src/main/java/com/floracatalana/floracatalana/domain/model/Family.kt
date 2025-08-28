@@ -2,7 +2,9 @@ package com.floracatalana.floracatalana.domain.model
 
 
 import androidx.annotation.Keep
+import com.floracatalana.floracatalana.domain.model.species.CategoryImage
 import com.floracatalana.floracatalana.domain.model.species.Description
+import com.floracatalana.floracatalana.domain.model.species.Ecology
 
 @Keep
 data class Family(
@@ -12,5 +14,8 @@ data class Family(
     override val nameLatin: String = "",
     override val nameCat: String = "",
     override val url: String = "",
+    val categoryImages: List<CategoryImage> = emptyList(),
     val description: Description = Description(),
+    val usos: String? = null,
+    val ecology: Ecology? = null,
 ): Taxon
