@@ -3,10 +3,12 @@ package com.floracatalana.floracatalana.domain.mappers
 import com.fleeksoft.ksoup.Ksoup
 import com.floracatalana.floracatalana.data.remote.HttpRoutes
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesDetailResponse
+import com.floracatalana.floracatalana.domain.model.ShortTaxon
 import com.floracatalana.floracatalana.domain.model.TaxonRank
 import com.floracatalana.floracatalana.domain.model.species.Altitude
 import com.floracatalana.floracatalana.domain.model.species.CategoryImage
 import com.floracatalana.floracatalana.domain.model.species.Description
+import com.floracatalana.floracatalana.domain.model.species.DescriptionSection
 import com.floracatalana.floracatalana.domain.model.species.Ecology
 import com.floracatalana.floracatalana.domain.model.species.Flowering
 import com.floracatalana.floracatalana.domain.model.species.Nomenclature
@@ -157,6 +159,7 @@ fun SpeciesDetailResponse.toSpecies(): Species {
     } else null
 
     val rank = TaxonRank.entries.firstOrNull { it.label == field_tipus_de_fitxa1.firstOrNull()?.value }
+    val nodeId = (nid.firstOrNull()?.value ?: 0).toString()
 
     return Species(
         code = field_codi.firstOrNull()?.value ?: "",
@@ -171,11 +174,15 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         nomenclature = nomenclature,
         rank = rank ?: TaxonRank.SPECIES,
         subspecies = subspecies,
-        gbifId = gbifId
-//        taxonomy = TODO(),
-//        nodeId = TODO(),
+        gbifId = gbifId,
+        shortGenus = field_genere.firstOrNull()?.let {
+            ShortTaxon(
+                code = it.target_id.toString(),
+            )
+        } ?: ShortTaxon(),
+        nodeId = nodeId,
+        taxonomy = null,
 //        images = TODO(),
 //        shortFamily = TODO(),
-//        shortGenus = TODO()
     )
 }
