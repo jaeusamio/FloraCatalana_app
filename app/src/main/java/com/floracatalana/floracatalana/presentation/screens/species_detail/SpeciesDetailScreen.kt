@@ -95,7 +95,7 @@ fun SpeciesDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Flora Catalana") },
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
