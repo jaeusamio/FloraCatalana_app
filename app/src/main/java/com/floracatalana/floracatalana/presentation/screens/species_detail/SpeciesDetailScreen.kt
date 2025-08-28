@@ -49,9 +49,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -262,10 +269,11 @@ fun SpeciesDetailScreen(
 fun DescriptionSection(description: Description) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(8.dp)) {
         description.lifeForm?.let {
-            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-                Text(text = "Forma vital", style = MaterialTheme.typography.titleLarge)
-                Text(text = it)
-            }
+            Text(
+                text = "Forma vital",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(text = it)
         }
         if (description.size.minSize != null || description.size.maxSize != null) {
             Column {
@@ -283,6 +291,34 @@ fun DescriptionSection(description: Description) {
                         description.size.maxSize?.let { Text(text = "Mida màxima: $it") }
                     }
                 }
+            }
+        }
+        if (description.sections.isNotEmpty()) {
+            Text(
+                text = "Descripció",
+                style = MaterialTheme.typography.titleLarge
+            )
+            description.sections.forEach { section ->
+                val annotatedString = AnnotatedString.fromHtml(
+                    section.text,
+                    linkStyles = TextLinkStyles(
+                        style = SpanStyle(
+                            textDecoration = TextDecoration.Underline,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ),
+                )
+
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(section.title)
+                            append(": ")
+                        }
+                        append(annotatedString)
+                    }
+                )
             }
         }
     }
