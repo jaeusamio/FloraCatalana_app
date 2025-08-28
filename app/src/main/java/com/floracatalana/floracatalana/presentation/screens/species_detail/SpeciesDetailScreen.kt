@@ -786,27 +786,38 @@ fun EcologySection(ecology: Ecology) {
                 }
             }
         }
-        Column {
-            Text(
-                text = "Altitud",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 12.dp)
-            )
-            Surface(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(12.dp)
+        val isAltitudeNull = ecology.altitude.altitudMinimaInferior == null &&
+                ecology.altitude.altitudMinima == null &&
+                ecology.altitude.altitudMaxima == null &&
+                ecology.altitude.altitudMaximaSuperior == null
+
+        if (!isAltitudeNull) {
+            Column {
+                Text(
+                    text = "Altitud",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+                Surface(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(10.dp)
                 ) {
-                    ecology.altitude.altitudMinimaInferior?.let {
-                        Text(text = "Altitud mínima inferior (m): $it")
-                    }
-                    Text(text = "Altitud mínima (m): ${ecology.altitude.altitudMinima}")
-                    Text(text = "Altitud màxima (m): ${ecology.altitude.altitudMaxima}")
-                    ecology.altitude.altitudMaximaSuperior?.let {
-                        Text(text = "Altitud màxima superior (m): $it")
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.padding(12.dp)
+                    ) {
+                        ecology.altitude.altitudMinimaInferior?.let {
+                            Text(text = "Altitud mínima inferior (m): $it")
+                        }
+                        ecology.altitude.altitudMinima?.let {
+                            Text(text = "Altitud mínima (m): $it")
+                        }
+                        ecology.altitude.altitudMaxima?.let {
+                            Text(text = "Altitud màxima (m): $it")
+                        }
+                        ecology.altitude.altitudMaximaSuperior?.let {
+                            Text(text = "Altitud màxima superior (m): $it")
+                        }
                     }
                 }
             }

@@ -15,10 +15,10 @@ import com.floracatalana.floracatalana.domain.model.species.Territory
 
 fun SpeciesDetailResponse.toSpecies(): Species {
     val altitude = Altitude(
-        altitudMaxima = field_altitud_maxima_m_.firstOrNull()?.value ?: 0,
-        altitudMinima = field_altitud_minima_m_.firstOrNull()?.value ?: 0,
-        altitudMinimaInferior = field_altitud_m.firstOrNull()?.value ?: 0,
-        altitudMaximaSuperior = field_altitud_maxima_superior.firstOrNull()?.value ?: 0
+        altitudMaxima = field_altitud_maxima_m_.firstOrNull()?.value,
+        altitudMinima = field_altitud_minima_m_.firstOrNull()?.value,
+        altitudMinimaInferior = field_altitud_m.firstOrNull()?.value,
+        altitudMaximaSuperior = field_altitud_maxima_superior.firstOrNull()?.value
     )
     val territory = Territory(
         distribucioGeneral = field_distribuciogen.firstOrNull()?.value,
