@@ -1,5 +1,6 @@
 package com.floracatalana.floracatalana.domain.mappers
 
+import com.fleeksoft.ksoup.Ksoup
 import com.floracatalana.floracatalana.data.remote.HttpRoutes
 import com.floracatalana.floracatalana.data.remote.dto.FamilyDetailResponse
 import com.floracatalana.floracatalana.domain.model.Family
@@ -91,13 +92,23 @@ fun FamilyDetailResponse.toFamily(): Family {
         }
     )
 
-    val territory = Territory(
-        distribucioGeneral = field_distribucio.firstOrNull()?.value,
-    )
-    val ecology = Ecology(
-        habitat = field_habitatfam.firstOrNull()?.value,
-        territory = territory
-    )
+    val description = if (descriptionSections.isNotEmpty()) {
+        Description(sections = descriptionSections)
+    } else null
+
+    val distribucioGeneral = field_distribucio.firstOrNull()?.value
+    val habitat = field_habitatfam.firstOrNull()?.value
+    val ecology = if (habitat == null && distribucioGeneral == null) null else {
+        val habitatParsed = habitat?.let { Ksoup.parse(html = it).body().text() }
+        val distribucioGeneralParsed = distribucioGeneral?.let {
+            Ksoup.parse(html = it).body().text()
+        }
+        val territory = Territory(distribucioGeneral = distribucioGeneralParsed)
+        Ecology(
+            habitat = habitatParsed,
+            territory = territory
+        )
+    }
 
     return Family(
         code = field_codi2.firstOrNull()?.value ?: "",
@@ -106,7 +117,7 @@ fun FamilyDetailResponse.toFamily(): Family {
         nodeId = nodeId,
         url = url,
         ecology = ecology,
-        description = Description(sections = descriptionSections),
+        description = description,
         categoryImages = categoryImages,
         usos = field_usos.firstOrNull()?.value,
     )

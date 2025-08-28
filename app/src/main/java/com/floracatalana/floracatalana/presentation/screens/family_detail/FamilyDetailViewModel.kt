@@ -33,6 +33,18 @@ class FamilyDetailViewModel(
     }
 
     fun onEvent(event: FamilyDetailEvent) {
+        when(event) {
+            is FamilyDetailEvent.SelectTab -> {
+                _state.value = state.value.copy(
+                    selectedTab = event.selectedTab
+                )
+            }
 
+            is FamilyDetailEvent.ToggleImageDialog -> {
+                _state.value = state.value.copy(
+                    imageUrl = event.imageUrl
+                )
+            }
+        }
     }
 }

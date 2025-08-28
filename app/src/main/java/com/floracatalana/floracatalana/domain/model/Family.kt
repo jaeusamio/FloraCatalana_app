@@ -15,7 +15,7 @@ data class Family(
     override val nameCat: String = "",
     override val url: String = "",
     val categoryImages: List<CategoryImage> = emptyList(),
-    val description: Description = Description(),
+    val description: Description? = null,
     val usos: String? = null,
     val ecology: Ecology? = null,
 ): Taxon

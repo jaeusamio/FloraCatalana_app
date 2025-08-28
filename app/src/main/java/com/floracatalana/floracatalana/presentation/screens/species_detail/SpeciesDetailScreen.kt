@@ -277,31 +277,44 @@ fun SpeciesDetailScreen(
     }
 
     if (state.imageUrl != null) {
-        Dialog(
-            onDismissRequest = { onEvent(SpeciesDetailEvent.ToggleImageDialog()) }
-        ) {
-            Box {
-                AsyncImage(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    model = state.imageUrl,
-                    contentDescription = null
+        ImageDialog(
+            onDismissRequest = { onEvent(SpeciesDetailEvent.ToggleImageDialog()) },
+            state.imageUrl
+        )
+    }
+}
+
+@Composable
+fun ImageDialog(
+    onDismissRequest: () -> Unit,
+    imageUrl: String
+) {
+    Dialog(
+        onDismissRequest = { onDismissRequest() }
+    ) {
+        Box {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                model = imageUrl,
+                contentDescription = null
+            )
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(Color.DarkGray)
+                    .border(width = 2.dp, color = Color.White, shape = CircleShape)
+                    .align(Alignment.TopEnd)
+                    .clickable { onDismissRequest() },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.padding(4.dp),
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Tancar",
+                    tint = Color.White
                 )
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color.DarkGray)
-                        .border(width = 2.dp, color = Color.White, shape = CircleShape)
-                        .align(Alignment.TopEnd)
-                        .clickable { onEvent(SpeciesDetailEvent.ToggleImageDialog()) },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.padding(4.dp),
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Tancar",
-                        tint = Color.White
-                    )
-                }
             }
         }
     }
