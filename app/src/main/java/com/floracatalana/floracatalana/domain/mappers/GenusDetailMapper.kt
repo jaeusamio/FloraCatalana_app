@@ -12,7 +12,6 @@ fun GenusDetailResponse.toGenus(): Genus {
         code = field_codi4.firstOrNull()?.value ?: "",
         nameLatin = field_nom_del_genere1.firstOrNull()?.value ?: "",
         nodeId = nodeId,
-        rank = "GÈNERE",
         url = url,
 //        nameCat = TODO(),
 //        shortFamily = TODO(),

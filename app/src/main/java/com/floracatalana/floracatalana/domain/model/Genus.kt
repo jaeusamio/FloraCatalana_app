@@ -5,11 +5,11 @@ import androidx.annotation.Keep
 
 @Keep
 data class Genus(
-    val code: String = "",
+    override val code: String = "",
+    override val nodeId: String = "",
+    override val rank: TaxonRank = TaxonRank.GENUS,
+    override val nameLatin: String = "",
+    override val nameCat: String? = null,
+    override val url: String = "",
     val shortFamily: ShortTaxon = ShortTaxon(),
-    val nameCat: String = "",
-    val nameLatin: String = "",
-    val nodeId: String = "",
-    val rank: String = "",
-    val url: String = "",
-)
+): Taxon

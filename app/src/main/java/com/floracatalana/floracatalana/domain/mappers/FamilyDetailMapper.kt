@@ -13,7 +13,6 @@ fun FamilyDetailResponse.toFamily(): Family {
         nameCat = field_nom_de_la_familia1.firstOrNull()?.value ?: "",
         nameLatin = field_pronunciaci.firstOrNull()?.value ?: "",
         nodeId = nodeId,
-        rank = "FAMíLIA",
         url = url,
 //        nGenera = TODO(),
 //        nSpecies = TODO(),

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.floracatalana.floracatalana.domain.model.TaxonRank
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,43 +66,12 @@ fun FamilyDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = family.rank, color = MaterialTheme.colorScheme.tertiary)
-//                    Column(
-//                        horizontalAlignment = Alignment.Start,
-//                        modifier = Modifier
-//                            .padding(vertical = 16.dp)
-//                            .align(Alignment.Start)
-//                    ) {
-//                        Text(text = "Gèneres", style = MaterialTheme.typography.titleLarge)
-//                        Surface(
-//                            color = MaterialTheme.colorScheme.primaryContainer,
-//                            shape = RoundedCornerShape(10.dp),
-//                            modifier = Modifier.widthIn(min = 250.dp)
-//                        ) {
-//                            Column(modifier = Modifier.padding(12.dp)) {
-//                                family.genera.forEach { species ->
-//                                    Text(
-//                                        text = species.name,
-//                                        textDecoration = TextDecoration.Underline,
-//                                        fontWeight = FontWeight.Bold,
-//                                        color = MaterialTheme.colorScheme.primary,
-//                                        modifier = Modifier
-//                                            .padding(vertical = 8.dp)
-//                                            .clickable {
-//                                                navController.navigate(
-//                                                    Screen.DetailGenus.passId(species.code)
-//                                                )
-//                                            }
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
                     Text(
                         text = family.nameCat,
                         style = MaterialTheme.typography.displaySmall,
                         textAlign = TextAlign.Center
                     )
+                    Text(text = family.rank.label, color = MaterialTheme.colorScheme.tertiary)
                 }
             }
         }

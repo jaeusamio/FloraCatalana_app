@@ -126,12 +126,12 @@ fun SpeciesDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = species.rank, color = MaterialTheme.colorScheme.tertiary)
                     Text(
                         text = species.nameLatin,
                         style = MaterialTheme.typography.displaySmall,
                         textAlign = TextAlign.Center
                     )
+                    Text(text = species.rank.label, color = MaterialTheme.colorScheme.tertiary)
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         SuggestionChip(
                             onClick = { /* navController.navigate(Screen.DetailGenus.passId(species.shortGenus.code)) */ },

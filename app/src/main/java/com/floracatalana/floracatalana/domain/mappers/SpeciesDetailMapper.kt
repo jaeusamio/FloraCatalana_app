@@ -3,6 +3,7 @@ package com.floracatalana.floracatalana.domain.mappers
 import com.fleeksoft.ksoup.Ksoup
 import com.floracatalana.floracatalana.data.remote.HttpRoutes
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesDetailResponse
+import com.floracatalana.floracatalana.domain.model.TaxonRank
 import com.floracatalana.floracatalana.domain.model.species.Altitude
 import com.floracatalana.floracatalana.domain.model.species.CategoryImage
 import com.floracatalana.floracatalana.domain.model.species.Description
@@ -116,6 +117,8 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         Ksoup.parse(html = mapaDistProcessed).body().select("div").first()?.id()?.replace("map", "")?.toInt()
     } else null
 
+    val rank = TaxonRank.entries.firstOrNull { it.label == field_tipus_de_fitxa1.firstOrNull()?.value }
+
     return Species(
         code = field_codi.firstOrNull()?.value ?: "",
         nameLatin = field_nom_cientific.firstOrNull()?.value ?: "",
@@ -127,7 +130,7 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         flowering = flowering,
         nameCat = field_nom_catala.firstOrNull()?.value,
         nomenclature = nomenclature,
-        rank = field_tipus_de_fitxa1.firstOrNull()?.value ?: "",
+        rank = rank ?: TaxonRank.SPECIES,
         subspecies = subspecies,
         gbifId = gbifId
 //        taxonomy = TODO(),
