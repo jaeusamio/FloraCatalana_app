@@ -4,6 +4,7 @@ import com.floracatalana.floracatalana.domain.model.Family
 import com.floracatalana.floracatalana.domain.model.Genus
 import com.floracatalana.floracatalana.domain.model.species.Species
 
+// FIXME: Migrate to Taxon interface to simplify fields
 data class SearchState(
     val speciesList: List<Species> = listOf(),
     val generaList: List<Genus> = listOf(),
