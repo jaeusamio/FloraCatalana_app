@@ -88,9 +88,48 @@ fun SpeciesDetailResponse.toSpecies(): Species {
         maxSize = field_mida_maxima.firstOrNull()?.value,
         minSize = field_mida_minima.firstOrNull()?.value
     )
+    val descriptionSections = listOfNotNull(
+        field_subterrani_descripcio.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Subterrani",
+                text = it.value
+            )
+        },
+        field_port_descripcio.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Port",
+                text = it.value
+            )
+        },
+        field_tija_tronc_descripcio.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Tija/tronc",
+                text = it.value
+            )
+        },
+        field_fulles_descripcio.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Fulles",
+                text = it.value
+            )
+        },
+        field_flor_inflorescencia_desc.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Flor/inflorescencia",
+                text = it.value
+            )
+        },
+        field_fruit_llavor_descripcio.firstOrNull()?.let {
+            DescriptionSection(
+                title = "Fruit/llavor",
+                text = it.value
+            )
+        }
+    )
     val description = Description(
         lifeForm = field_forma_vital.firstOrNull()?.value,
-        size = size
+        size = size,
+        sections = descriptionSections
     )
 
     val nomenclature = Nomenclature(

@@ -6,5 +6,6 @@ import androidx.annotation.Keep
 @Keep
 data class Description(
     val lifeForm: String? = "",
-    val size: Size = Size()
+    val size: Size = Size(),
+    val sections: List<DescriptionSection> = emptyList()
 )
