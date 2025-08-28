@@ -12,4 +12,8 @@ sealed class Screen(val route: String) {
     data object DetailFamily: Screen(route = "detail_family/{id}") {
         fun passId(id: String) = "detail_family/$id"
     }
+
+    data object SubtaxaList: Screen(route = "subtaxa_list/{id}/{queried_rank}/{returned_rank}") {
+        fun passValues(id: String, queriedRank: Int, returnedRank: Int) = "subtaxa_list/$id/$queriedRank/$returnedRank"
+    }
 }
