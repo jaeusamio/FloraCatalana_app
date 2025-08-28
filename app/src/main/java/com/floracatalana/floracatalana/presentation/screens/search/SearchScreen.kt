@@ -77,128 +77,131 @@ fun SearchScreen(
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     if (!isKeyboardOpen) focusManager.clearFocus()
-    Scaffold(
-        topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                        .padding(top = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = null,
-                        modifier = Modifier.size(45.dp)
-                    )
-                    val keyboardController = LocalSoftwareKeyboardController.current
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = state.searchBarText,
-                        placeholder = {
-                            Text(
-                                text = "Cerca ${state.selectedTab.value.lowercase()}",
-                                modifier = Modifier.alpha(alpha = 0.5f)
-                            )
-                        },
-                        singleLine = true,
-                        maxLines = 1,
-                        onValueChange = {
-                            when (state.selectedTab) {
-                                TaxonListTab.SPECIES -> onEvent(SearchEvent.SearchSpecies(it))
-                                TaxonListTab.GENERA -> onEvent(SearchEvent.SearchGenera(it))
-                                TaxonListTab.FAMILIES -> onEvent(SearchEvent.SearchFamilies(it))
-                            }
-                        },
-                        trailingIcon = {
-                            if (state.searchBarText.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    onEvent(SearchEvent.CleanSearchBar)
-                                    focusManager.clearFocus()
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = "Neteja la cerca"
-                                    )
-                                }
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = {
-                            keyboardController?.hide()
-                            focusManager.clearFocus()
-                        }),
-//                        focusRequester = focusRequester
-                    )
-                }
-            }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            if (state.loading) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                PrimaryTabRow(selectedTabIndex = state.selectedTab.index) {
-                    TaxonListTab.entries.forEach { tab ->
-                        Tab(
-                            selected = state.selectedTab == tab,
-                            onClick = {
-                                onEvent(SearchEvent.SelectTab(selectedTab = tab))
+    Scaffold { paddingValues ->
+        Scaffold(
+            modifier = Modifier.padding(paddingValues),
+            topBar = {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp)
+                            .padding(top = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo),
+                            contentDescription = null,
+                            modifier = Modifier.size(45.dp)
+                        )
+                        val keyboardController = LocalSoftwareKeyboardController.current
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = state.searchBarText,
+                            placeholder = {
+                                Text(
+                                    text = "Cerca ${state.selectedTab.value.lowercase()}",
+                                    modifier = Modifier.alpha(alpha = 0.5f)
+                                )
                             },
-                            icon = { Icon(imageVector = tab.icon, contentDescription = null) },
-                            text = { Text(text = tab.value) }
+                            singleLine = true,
+                            maxLines = 1,
+                            onValueChange = {
+                                when (state.selectedTab) {
+                                    TaxonListTab.SPECIES -> onEvent(SearchEvent.SearchSpecies(it))
+                                    TaxonListTab.GENERA -> onEvent(SearchEvent.SearchGenera(it))
+                                    TaxonListTab.FAMILIES -> onEvent(SearchEvent.SearchFamilies(it))
+                                }
+                            },
+                            trailingIcon = {
+                                if (state.searchBarText.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        onEvent(SearchEvent.CleanSearchBar)
+                                        focusManager.clearFocus()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Neteja la cerca"
+                                        )
+                                    }
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(onDone = {
+                                keyboardController?.hide()
+                                focusManager.clearFocus()
+                            }),
+//                        focusRequester = focusRequester
                         )
                     }
                 }
-                val items = when (state.selectedTab) {
-                    TaxonListTab.SPECIES -> state.autocompleteSpeciesList
-                    TaxonListTab.GENERA -> state.autocompleteGeneraList
-                    TaxonListTab.FAMILIES -> state.autocompleteFamilyList
-                }
-                Text(
-                    text = "${items.size} resultats",
-                    color = MaterialTheme.colorScheme.outline,
-                    fontStyle = FontStyle.Italic
-                )
-                LazyColumn {
-                    if (items.filterIsInstance<Species>().size == items.size) {
-                        items as List<Species>
-                        items(items = items, key = null) {
-                            SpeciesCard(
-                                species = it
-                            ) { navController.navigate(Screen.DetailSpecies.passId(it.code)) }
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    } else if (items.filterIsInstance<Genus>().size == items.size) {
-                        items as List<Genus>
-                        items(items = items, key = null) {
-                            GenusCard(
-                                genus = it,
-                                onClick = { navController.navigate(Screen.DetailGenus.passId(it.nodeId)) }
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (state.loading) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    PrimaryTabRow(selectedTabIndex = state.selectedTab.index) {
+                        TaxonListTab.entries.forEach { tab ->
+                            Tab(
+                                selected = state.selectedTab == tab,
+                                onClick = {
+                                    onEvent(SearchEvent.SelectTab(selectedTab = tab))
+                                },
+                                icon = { Icon(imageVector = tab.icon, contentDescription = null) },
+                                text = { Text(text = tab.value) }
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
                         }
-                    } else {
-                        items as List<Family>
-                        items(items = items, key = null) {
-                            FamilyCard(
-                                family = it,
-                                onClick = { navController.navigate(Screen.DetailFamily.passId(it.nodeId)) }
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    val items = when (state.selectedTab) {
+                        TaxonListTab.SPECIES -> state.autocompleteSpeciesList
+                        TaxonListTab.GENERA -> state.autocompleteGeneraList
+                        TaxonListTab.FAMILIES -> state.autocompleteFamilyList
+                    }
+                    Text(
+                        text = "${items.size} resultats",
+                        color = MaterialTheme.colorScheme.outline,
+                        fontStyle = FontStyle.Italic
+                    )
+                    LazyColumn {
+                        if (items.filterIsInstance<Species>().size == items.size) {
+                            items as List<Species>
+                            items(items = items, key = null) {
+                                SpeciesCard(
+                                    species = it
+                                ) { navController.navigate(Screen.DetailSpecies.passId(it.code)) }
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        } else if (items.filterIsInstance<Genus>().size == items.size) {
+                            items as List<Genus>
+                            items(items = items, key = null) {
+                                GenusCard(
+                                    genus = it,
+                                    onClick = { navController.navigate(Screen.DetailGenus.passId(it.nodeId)) }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        } else {
+                            items as List<Family>
+                            items(items = items, key = null) {
+                                FamilyCard(
+                                    family = it,
+                                    onClick = { navController.navigate(Screen.DetailFamily.passId(it.nodeId)) }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
                         }
                     }
                 }
