@@ -27,6 +27,6 @@ object HttpRoutes {
                 "&bin=hex" +
                 "&hexPerTile=32" +
                 "&squareSize=64" +
-                "&style=classic-noborder.poly"
+                "&style=classic.poly"
     }
 }
