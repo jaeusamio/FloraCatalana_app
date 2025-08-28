@@ -9,5 +9,6 @@ data class SpeciesDetailState(
     val family: Family = Family(),
     val genus: Genus = Genus(),
     val loading: Boolean = true,
-    val selectedTab: Int = 0
+    val selectedTab: Int = 0,
+    val imageUrl: String? = null
 )

@@ -37,6 +37,10 @@ class SpeciesDetailViewModel(
             is SpeciesDetailEvent.SelectTab -> {
                 _state.value = state.value.copy(selectedTab = event.selectedTab)
             }
+
+            is SpeciesDetailEvent.ToggleImageDialog -> {
+                _state.value = state.value.copy(imageUrl = event.imageUrl)
+            }
         }
     }
 }

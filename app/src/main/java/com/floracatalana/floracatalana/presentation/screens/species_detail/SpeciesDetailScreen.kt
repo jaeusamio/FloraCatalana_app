@@ -20,10 +20,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.FilterVintage
 import androidx.compose.material3.CircularProgressIndicator
@@ -50,6 +52,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
@@ -61,7 +64,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -232,7 +237,14 @@ fun SpeciesDetailScreen(
                         }
                     }
                     if (tabTitles[state.selectedTab] == DESCRIPTION) {
-                        species.description?.let { DescriptionSection(description = it) }
+                        species.description?.let {
+                            DescriptionSection(
+                                description = it,
+                                onExpandImageClick = { url ->
+                                    onEvent(SpeciesDetailEvent.ToggleImageDialog(url))
+                                }
+                            )
+                        }
                     }
                     if (tabTitles[state.selectedTab] == DISTRIBUTION) {
                         DistributionSection(
@@ -263,10 +275,40 @@ fun SpeciesDetailScreen(
             }
         }
     }
+
+    if (state.imageUrl != null) {
+        Dialog(
+            onDismissRequest = { onEvent(SpeciesDetailEvent.ToggleImageDialog()) }
+        ) {
+            Box {
+                AsyncImage(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    model = state.imageUrl,
+                    contentDescription = null
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(Color.DarkGray)
+                        .border(width = 2.dp, color = Color.White, shape = CircleShape)
+                        .align(Alignment.TopEnd)
+                        .clickable { onEvent(SpeciesDetailEvent.ToggleImageDialog()) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(4.dp),
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Tancar",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
-fun DescriptionSection(description: Description) {
+fun DescriptionSection(description: Description, onExpandImageClick: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(8.dp)) {
         description.lifeForm?.let {
             Text(
@@ -308,6 +350,9 @@ fun DescriptionSection(description: Description) {
                             color = MaterialTheme.colorScheme.primary
                         )
                     ),
+                    linkInteractionListener = { url ->
+                        onExpandImageClick(HttpRoutes.BASE_URL + (url as LinkAnnotation.Url).url)
+                    }
                 )
 
                 Text(
