@@ -141,6 +141,7 @@ fun SpeciesDetailScreen(
                         )
                         SuggestionChip(
                             onClick = { /* navController.navigate(Screen.DetailFamily.passId(species.shortFamily.code)) */ },
+                            enabled = false,
                             label = {
                                 Text(text = "Família")
                             }
@@ -160,7 +161,10 @@ fun SpeciesDetailScreen(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = { /* navController.navigate(Screen.DetailImages.route) */ }) {
+                    TextButton(
+                        onClick = { /* navController.navigate(Screen.DetailImages.route) */ },
+                        enabled = false
+                    ) {
                         Text(text = "Més imatges (${species.images.size})")
                     }
                 }
