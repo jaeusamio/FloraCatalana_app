@@ -200,7 +200,9 @@ fun SpeciesDetailScreen(
 
                 val tabTitles = mutableListOf<String>()
                 if (species.description != null) tabTitles.add(DESCRIPTION)
-                if (species.distribution != null) tabTitles.add(DISTRIBUTION)
+                if (species.distribution != null || species.gbifId != null) tabTitles.add(
+                    DISTRIBUTION
+                )
                 if (species.nomenclature != null) tabTitles.add(NOMENCLATURE)
                 if (species.taxonomy != null) tabTitles.add(TAXONOMY)
                 if (species.flowering != null) tabTitles.add(FLOWERING)
@@ -226,7 +228,10 @@ fun SpeciesDetailScreen(
                         species.description?.let { DescriptionSection(description = it) }
                     }
                     if (tabTitles[state.selectedTab] == DISTRIBUTION) {
-                        species.distribution?.let { DistributionSection(distribution = it, species.gbifId) }
+                        DistributionSection(
+                            distribution = species.distribution,
+                            taxonKey = species.gbifId
+                        )
                     }
                     if (tabTitles[state.selectedTab] == NOMENCLATURE) {
                         species.nomenclature?.let { NomenclatureSection(nomenclature = it) }
@@ -284,7 +289,7 @@ fun DescriptionSection(description: Description) {
 }
 
 @Composable
-fun DistributionSection(distribution: String, taxonKey: Int?) {
+fun DistributionSection(distribution: String?, taxonKey: Int?) {
     val uriHandler = LocalUriHandler.current
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(8.dp)) {
         val cameraPositionState = rememberCameraPositionState {
@@ -320,14 +325,15 @@ fun DistributionSection(distribution: String, taxonKey: Int?) {
         ) {
             taxonKey?.let { TileOverlay(MapTileProvider(taxonKey = it)) }
         }
-
-        Text(
-            text = "Mapa de distribució (BDBC)",
-            textDecoration = TextDecoration.Underline,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable { uriHandler.openUri(distribution) }
-        )
+        distribution?.let {
+            Text(
+                text = "Mapa de distribució (BDBC)",
+                textDecoration = TextDecoration.Underline,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable { uriHandler.openUri(distribution) }
+            )
+        }
 
     }
 }
