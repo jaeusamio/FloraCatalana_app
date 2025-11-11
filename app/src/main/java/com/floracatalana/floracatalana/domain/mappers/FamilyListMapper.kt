@@ -6,14 +6,14 @@ import com.floracatalana.floracatalana.data.remote.dto.FamilyListResponse
 import com.floracatalana.floracatalana.domain.model.Family
 
 fun FamilyListResponse.toFamily(): Family {
-    val nomFamilia = Ksoup.parse(html = nom_familia_cat).text()
-    val familyUrl = Ksoup.parse(html = nom_familia_cat).body().select("a").attr("href")
+    val nomFamilia = Ksoup.parse(html = nom_cat).text()
+    val familyUrl = Ksoup.parse(html = nom_cat).body().select("a").attr("href")
     val nodeId = familyUrl.split("/").last().replace("\\", "")
     
     return Family(
-        code = codi_familia,
+        code = id,
         nameCat = nomFamilia,
-        nameLatin = nom_familia_llati,
+        nameLatin = nom_llati,
         url = HttpRoutes.BASE_URL + familyUrl,
         nodeId = nodeId,
 //        nGenera = TODO(),

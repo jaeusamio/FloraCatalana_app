@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SpeciesListResponse(
-    val Imatges: String,
-    val codi_familia: String,
-    val codi_genere: String,
-    val codi_taxon_final: String,
+    val id: String,
+    val id_genere: String,
+    val id_familia: String,
+    val imatges: String,
     val nom_cientific: String,
+    val nom_genere: String,
     val nom_familia: String,
-    val nom_genere: String
 )

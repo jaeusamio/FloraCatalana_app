@@ -1,5 +1,6 @@
 package com.floracatalana.floracatalana.data.remote
 
+import com.floracatalana.floracatalana.BuildConfig
 import com.floracatalana.floracatalana.data.remote.dto.FamilyDetailResponse
 import com.floracatalana.floracatalana.data.remote.dto.FamilyListResponse
 import com.floracatalana.floracatalana.data.remote.dto.GenusDetailResponse
@@ -8,6 +9,9 @@ import com.floracatalana.floracatalana.data.remote.dto.SpeciesDetailResponse
 import com.floracatalana.floracatalana.data.remote.dto.SpeciesListResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import io.ktor.client.plugins.auth.providers.basic
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -18,12 +22,16 @@ import kotlinx.serialization.json.Json
 class FloracatalanaApiImpl : FloracatalanaApi {
 
     private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    ignoreUnknownKeys = true
+        install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+        install(Auth) {
+            basic {
+                credentials {
+                    BasicAuthCredentials(
+                        username = BuildConfig.apiUser,
+                        password = BuildConfig.apiPassword
+                    )
                 }
-            )
+            }
         }
     }
 

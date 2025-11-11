@@ -12,14 +12,14 @@ fun SpeciesListResponse.toSpecies(): Species {
     val nomGenere = Ksoup.parse(html = nom_genere).text()
     val speciesUrl = Ksoup.parse(html = nom_cientific).body().select("a").attr("href")
     return Species(
-        code = codi_taxon_final,
+        code = id,
         nameLatin = nomCientific,
         shortFamily = ShortTaxon(
-            code = codi_familia,
+            code = id_familia,
             name = nomFamilia
         ),
         shortGenus = ShortTaxon(
-            code = codi_genere,
+            code = id_genere,
             name = nomGenere
         ),
         url = HttpRoutes.BASE_URL + speciesUrl

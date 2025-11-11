@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -23,6 +24,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val fcUser = getSecret("FLORACATALANA_USERNAME")
+        val fcPassword = getSecret("FLORACATALANA_PASSWORD")
+        buildConfigField("String", "apiUser", fcUser)
+        buildConfigField("String", "apiPassword", fcPassword)
     }
 
     buildTypes {
@@ -46,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
@@ -122,10 +129,21 @@ dependencies {
     implementation (libs.ktor.client.negotiation)
     implementation (libs.ktor.client.okhttp)
     implementation (libs.ktor.serialization)
+    implementation(libs.ktor.client.authentication)
 
     // Ksoup
     implementation(libs.ksoup)
 
     // Maplibre
     implementation(libs.maplibre.compose)
+}
+
+fun getSecret(propertyName: String): String {
+    val secretsFile = rootProject.file("secrets.properties")
+    if (secretsFile.exists()) {
+        val properties = Properties()
+        secretsFile.inputStream().use { properties.load(it) }
+        val property = properties.getProperty(propertyName)
+        return property
+    } else return "invalid"
 }

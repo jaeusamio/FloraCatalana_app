@@ -1,6 +1,7 @@
-Prototipus d'aplicació Android de Flora Catalana.
+# App floracatalana
 
-
-
-https://github.com/jaymaeuro/FloraCatalana_app/assets/67653806/f8b21cb0-7bc9-4cb3-bce6-ac7ed70efbd9
-
+Per poder executar l'app, crea un fitxer `secrets.properties` al directori principal i afegeix les següents variables:
+```
+FLORACATALANA_USERNAME=[usuari]
+FLORACATALANA_PASSWORD=[contrassenya]
+```
