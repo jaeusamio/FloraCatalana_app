@@ -5,7 +5,6 @@ object HttpRoutes {
     const val BASE_URL = "https://floracatalana.cat"
 
     const val SPECIES_LIST = "$BASE_URL/flora/api/vasculars/taxonsfinalscodi?_format=json"
-    const val SPECIES_SEARCH = "$BASE_URL/flora/api/vasculars/taxonsfinalscodi?_format=json"
     const val GENUS_LIST = "$BASE_URL/flora/api/vasculars/generescodi?_format=json"
     const val FAMILY_LIST = "$BASE_URL/flora/api/vasculars/familiescodi?_format=json"
 

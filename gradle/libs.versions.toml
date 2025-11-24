@@ -18,6 +18,7 @@ kspVersion = "2.1.20-1.0.32"
 koinAnnotationsVersion = "2.1.0"
 ktor = "3.2.3"
 maplibre = "0.10.4"
+pagingRuntime = "3.3.6"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -66,6 +67,8 @@ ktor-client-authentication = { module = "io.ktor:ktor-client-auth", version.ref=
 ktor-serialization = {module = "io.ktor:ktor-serialization-kotlinx-json", version.ref="ktor"}
 
 maplibre-compose = { module = "dev.sargunv.maplibre-compose:maplibre-compose", version.ref = "maplibre" }
+
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

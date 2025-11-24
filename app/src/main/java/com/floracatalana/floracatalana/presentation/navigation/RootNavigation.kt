@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.floracatalana.floracatalana.presentation.screens.family_detail.FamilyDetailScreen
 import com.floracatalana.floracatalana.presentation.screens.family_detail.FamilyDetailViewModel
 import com.floracatalana.floracatalana.presentation.screens.genus_detail.GenusDetailScreen
@@ -29,8 +30,17 @@ fun RootNavGraph(
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screen.Search.route) {
             val viewModel = koinViewModel<SearchViewModel>()
+            val state = viewModel.state.value
+            val speciesFlow = viewModel
+                .pagedSpecies(searchValue = state.searchBarText)
+                .collectAsLazyPagingItems()
+            val genusFlow = viewModel.pagedGenera().collectAsLazyPagingItems()
+            val familyFlow = viewModel.pagedFamilies().collectAsLazyPagingItems()
             SearchScreen(
-                state = viewModel.state.value,
+                state = state,
+                speciesList = speciesFlow,
+                genusList = genusFlow,
+                familyList = familyFlow,
                 onEvent = viewModel::onEvent,
                 navController = navController
             )

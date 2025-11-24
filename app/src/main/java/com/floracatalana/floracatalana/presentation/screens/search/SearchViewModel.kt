@@ -4,7 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.cachedIn
+import com.floracatalana.floracatalana.data.paging.factory.GenusPagerFactory
+import com.floracatalana.floracatalana.data.paging.factory.SpeciesPagerFactory
 import com.floracatalana.floracatalana.data.remote.FloracatalanaApi
+import com.floracatalana.floracatalana.data.remote.dto.FamilyListResponse
 import com.floracatalana.floracatalana.domain.mappers.toFamily
 import com.floracatalana.floracatalana.domain.mappers.toGenus
 import com.floracatalana.floracatalana.domain.mappers.toSpecies
@@ -15,10 +20,29 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class SearchViewModel(
     private val floracatalanaApi: FloracatalanaApi,
+    private val speciesPagerFactory: SpeciesPagerFactory,
+    private val genusPagerFactory: GenusPagerFactory,
+    private val familyPager: Pager<Int, FamilyListResponse>
 ) : ViewModel() {
 
     private val _state = mutableStateOf(SearchState())
     val state: State<SearchState> = _state
+
+
+    fun pagedSpecies(
+        searchValue: String,
+        genusCode: String? = null,
+        familyCode: String? = null
+    ) = speciesPagerFactory
+        .create(searchValue = searchValue, genusCode = genusCode, familyCode = familyCode)
+        .flow
+        .cachedIn(viewModelScope)
+
+    fun pagedGenera(
+        familyCode: String? = null
+    ) = genusPagerFactory.create(familyCode = familyCode).flow.cachedIn(viewModelScope)
+
+    fun pagedFamilies() = familyPager.flow.cachedIn(viewModelScope)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

@@ -37,25 +37,16 @@ class FloracatalanaApiImpl : FloracatalanaApi {
 
     override suspend fun getSpeciesList(
         page: Int,
+        searchValue: String,
         genusCode: String?,
         familyCode: String?
     ): List<SpeciesListResponse> {
         return httpClient.get {
             url(HttpRoutes.SPECIES_LIST)
             parameter("page", page)
+            parameter("field_nom_cientific_value", searchValue)
             parameter("field_codi4_value", genusCode)
             parameter("field_codi2_value", familyCode)
-        }.body()
-    }
-
-    override suspend fun getSearchSpeciesList(
-        searchValue: String,
-        page: Int
-    ): List<SpeciesListResponse> {
-        return httpClient.get {
-            url(HttpRoutes.SPECIES_SEARCH)
-            parameter("page", page)
-            parameter("field_nom_cientific_value", searchValue)
         }.body()
     }
 

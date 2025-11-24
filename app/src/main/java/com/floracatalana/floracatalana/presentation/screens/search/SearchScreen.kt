@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -59,8 +58,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.floracatalana.floracatalana.R
+import com.floracatalana.floracatalana.data.remote.dto.FamilyListResponse
+import com.floracatalana.floracatalana.data.remote.dto.GenusListResponse
+import com.floracatalana.floracatalana.data.remote.dto.SpeciesListResponse
+import com.floracatalana.floracatalana.domain.mappers.toFamily
+import com.floracatalana.floracatalana.domain.mappers.toGenus
+import com.floracatalana.floracatalana.domain.mappers.toSpecies
 import com.floracatalana.floracatalana.domain.model.Family
 import com.floracatalana.floracatalana.domain.model.Genus
 import com.floracatalana.floracatalana.domain.model.species.Image
@@ -72,6 +79,9 @@ import com.floracatalana.floracatalana.presentation.navigation.Screen
 fun SearchScreen(
     navController: NavController,
     state: SearchState,
+    speciesList: LazyPagingItems<SpeciesListResponse>,
+    genusList: LazyPagingItems<GenusListResponse>,
+    familyList: LazyPagingItems<FamilyListResponse>,
     onEvent: (SearchEvent) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -165,42 +175,60 @@ fun SearchScreen(
                             )
                         }
                     }
-                    val items = when (state.selectedTab) {
-                        TaxonListTab.SPECIES -> state.autocompleteSpeciesList
-                        TaxonListTab.GENERA -> state.autocompleteGeneraList
-                        TaxonListTab.FAMILIES -> state.autocompleteFamilyList
-                    }
-                    Text(
-                        text = "${items.size} resultats",
-                        color = MaterialTheme.colorScheme.outline,
-                        fontStyle = FontStyle.Italic
-                    )
                     LazyColumn {
-                        if (items.filterIsInstance<Species>().size == items.size) {
-                            items as List<Species>
-                            items(items = items, key = null) {
-                                SpeciesCard(
-                                    species = it
-                                ) { navController.navigate(Screen.DetailSpecies.passId(it.code)) }
-                                Spacer(modifier = Modifier.height(8.dp))
+                        when (state.selectedTab) {
+                            TaxonListTab.SPECIES -> {
+                                items(
+                                    count = speciesList.itemCount,
+                                    key = speciesList.itemKey { it.id }
+                                ) { index ->
+                                    val item = speciesList[index]?.toSpecies() ?: return@items
+                                    SpeciesCard(
+                                        species = item,
+                                        onClick = {
+                                            navController.navigate(
+                                                Screen.DetailSpecies.passId(item.code)
+                                            )
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
                             }
-                        } else if (items.filterIsInstance<Genus>().size == items.size) {
-                            items as List<Genus>
-                            items(items = items, key = null) {
-                                GenusCard(
-                                    genus = it,
-                                    onClick = { navController.navigate(Screen.DetailGenus.passId(it.nodeId)) }
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
+
+                            TaxonListTab.GENERA -> {
+                                items(
+                                    count = genusList.itemCount,
+                                    key = genusList.itemKey { it.id }
+                                ) { index ->
+                                    val item = genusList[index]?.toGenus() ?: return@items
+                                    GenusCard(
+                                        genus = item,
+                                        onClick = {
+                                            navController.navigate(
+                                                Screen.DetailGenus.passId(item.nodeId)
+                                            )
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
                             }
-                        } else {
-                            items as List<Family>
-                            items(items = items, key = null) {
-                                FamilyCard(
-                                    family = it,
-                                    onClick = { navController.navigate(Screen.DetailFamily.passId(it.nodeId)) }
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
+
+                            TaxonListTab.FAMILIES -> {
+                                items(
+                                    count = familyList.itemCount,
+                                    key = familyList.itemKey { it.id }
+                                ) { index ->
+                                    val item = familyList[index]?.toFamily() ?: return@items
+                                    FamilyCard(
+                                        family = item,
+                                        onClick = {
+                                            navController.navigate(
+                                                Screen.DetailFamily.passId(item.nodeId)
+                                            )
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
                             }
                         }
                     }
@@ -289,9 +317,10 @@ fun BaseCard(
     icon: ImageVector,
     onClick: () -> Unit
 ) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClick() }) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }) {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             if (imageUrl != null) {
                 AsyncImage(

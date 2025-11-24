@@ -136,6 +136,9 @@ dependencies {
 
     // Maplibre
     implementation(libs.maplibre.compose)
+
+    // Paging 3
+    implementation(libs.androidx.paging.compose)
 }
 
 fun getSecret(propertyName: String): String {
