@@ -15,3 +15,8 @@
 local.properties
 app/src/main/res/values/google_maps_api.xml
 /secrets.properties
+/.idea/.name
+/.idea/AndroidProjectSystem.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/runConfigurations.xml
+/.idea/vcs.xml
