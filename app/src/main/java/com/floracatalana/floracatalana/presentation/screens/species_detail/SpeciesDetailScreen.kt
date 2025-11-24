@@ -85,15 +85,17 @@ import com.floracatalana.floracatalana.util.ECOLOGY
 import com.floracatalana.floracatalana.util.FLOWERING
 import com.floracatalana.floracatalana.util.NOMENCLATURE
 import com.floracatalana.floracatalana.util.TAXONOMY
-import dev.sargunv.maplibrecompose.compose.MaplibreMap
-import dev.sargunv.maplibrecompose.compose.layer.RasterLayer
-import dev.sargunv.maplibrecompose.compose.rememberCameraState
-import dev.sargunv.maplibrecompose.core.BaseStyle
-import dev.sargunv.maplibrecompose.core.GestureOptions
-import dev.sargunv.maplibrecompose.core.MapOptions
-import dev.sargunv.maplibrecompose.core.OrnamentOptions
-import io.github.dellisd.spatialk.geojson.BoundingBox
-import io.github.dellisd.spatialk.geojson.Position
+import org.maplibre.compose.camera.CameraPosition
+import org.maplibre.compose.camera.rememberCameraState
+import org.maplibre.compose.layers.RasterLayer
+import org.maplibre.compose.map.GestureOptions
+import org.maplibre.compose.map.MapOptions
+import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.OrnamentOptions
+import org.maplibre.compose.sources.RasterSource
+import org.maplibre.compose.style.BaseStyle
+import org.maplibre.spatialk.geojson.BoundingBox
+import org.maplibre.spatialk.geojson.Position
 import kotlin.reflect.full.memberProperties
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -390,7 +392,7 @@ fun DistributionSection(distribution: String?, taxonKey: Int?) {
         val camera =
             rememberCameraState(
                 firstPosition =
-                    dev.sargunv.maplibrecompose.core.CameraPosition(
+                    CameraPosition(
                         target = Position(
                             1.719533,
                             41.670716
@@ -433,11 +435,12 @@ fun DistributionSection(distribution: String?, taxonKey: Int?) {
             cameraState = camera,
             options = mapOptions
         ) {
-            val source = dev.sargunv.maplibrecompose.core.source.RasterSource(
+            val source = RasterSource(
                 id = "gbif-occurrence-density",
                 tiles = listOf(gbifTiles),
                 tileSize = 512,
             )
+            @Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
             RasterLayer(
                 id = "gbif-occurrence-density-layer",
                 source = source
